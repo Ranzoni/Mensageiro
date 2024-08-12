@@ -1,4 +1,5 @@
 using Bogus;
+using Mensageiro.Excecoes;
 using System.ComponentModel;
 
 namespace Mensageiro.Teste
@@ -20,6 +21,20 @@ namespace Mensageiro.Teste
             Assert.Equal(msg, mensagemCriada);
         }
 
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        internal void NaoDeveAdicionarMensagemEmStringVazia(string msgInvalida)
+        {
+            var notificador = new Notificador();
+
+            notificador.AddMensagem(msgInvalida);
+
+            Assert.False(notificador.ExisteMensagem());
+            Assert.False(notificador.Mensagens().Any());
+        }
+
         [Fact]
         internal void DeveAdicionarMensagemEmEnum()
         {
@@ -30,6 +45,19 @@ namespace Mensageiro.Teste
             var mensagemCriada = notificador.Mensagens().First();
             var enumMsgEmString = Descricao(EMensagemTeste.MensagemTeste);
             Assert.Equal(enumMsgEmString, mensagemCriada);
+        }
+
+        [Theory]
+        [InlineData(EMensagemTeste.MensagemTesteDescricaoSemParametro)]
+        [InlineData(EMensagemTeste.MensagemTesteDescricaoVazia)]
+        [InlineData(EMensagemTeste.MensagemTesteDescricaoEspacoEmBranco)]
+        internal void DeveRetornarExcecaoAoAdicionarMensagemEmEnumVazia(EMensagemTeste msgInvalida)
+        {
+            var notificador = new Notificador();
+
+            var excecao = Assert.Throws<MensageiroExcecao>(() => notificador.AddMensagem(msgInvalida));
+
+            Assert.IsType<MensageiroExcecao>(excecao);
         }
 
         private static string? Descricao<T>(T value) where T : struct, IConvertible

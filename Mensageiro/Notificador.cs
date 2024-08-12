@@ -1,4 +1,6 @@
 ﻿
+using Mensageiro.Excecoes;
+
 namespace Mensageiro
 {
     public class Notificador : INotificador
@@ -18,7 +20,10 @@ namespace Mensageiro
         {
             var mensagemEmString = mensagem.Descricao();
             if (string.IsNullOrEmpty(mensagemEmString) || string.IsNullOrWhiteSpace(mensagemEmString))
-                throw new ApplicationException("Não foi encontrada uma descrição para este ENum");
+            {
+                MensageiroExcecao.MensagemNotificacaoVazia();
+                return;
+            }
 
             _mensagens.Add(mensagemEmString);
         }
