@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mensageiro.WebApi\Mensageiro.WebApi.csproj" />
     <ProjectReference Include="..\Mensageiro\Mensageiro.csproj" />
   </ItemGroup>
 

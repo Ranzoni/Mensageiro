@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Mensageiro.Teste
+namespace Mensageiro.Teste.Mensageiro
 {
     internal enum EMensagemTeste
     {

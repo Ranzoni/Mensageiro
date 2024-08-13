@@ -1,11 +1,10 @@
-﻿
-using Mensageiro.Excecoes;
+﻿using Mensageiro.Excecoes;
 
 namespace Mensageiro
 {
-    public class Notificador : INotificador
+    public class Notificador : NotificadorBase, INotificador
     {
-        private readonly List<string> _mensagens = [];
+        const string MSG_NAO_ENCONTRADO = "NAO_ENCONTRADO";
 
         public void AddMensagem(string mensagem)
         {
@@ -13,7 +12,7 @@ namespace Mensageiro
                 return;
 
             var mensagemEmString = mensagem;
-            _mensagens.Add(mensagemEmString);
+            AddMensagemLista(mensagemEmString);
         }
 
         public void AddMensagem<T>(T mensagem) where T : struct, IConvertible
@@ -25,17 +24,54 @@ namespace Mensageiro
                 return;
             }
 
-            _mensagens.Add(mensagemEmString);
+            AddMensagemLista(mensagemEmString);
+        }
+
+        public void AddMensagemNaoEncontrado(string mensagem)
+        {
+            if (string.IsNullOrEmpty(mensagem) || string.IsNullOrWhiteSpace(mensagem))
+                return;
+
+            AddMensagemLista(
+                mensagem: mensagem,
+                chave: MSG_NAO_ENCONTRADO);
+        }
+
+        public void AddMensagemNaoEncontrado<T>(T mensagem) where T : struct, IConvertible
+        {
+            var mensagemEmString = mensagem.Descricao();
+            if (string.IsNullOrEmpty(mensagemEmString) || string.IsNullOrWhiteSpace(mensagemEmString))
+            {
+                MensageiroExcecao.MensagemNotificacaoVazia();
+                return;
+            }
+
+            AddMensagemLista(
+                mensagem: mensagemEmString,
+                chave: MSG_NAO_ENCONTRADO);
         }
 
         public bool ExisteMensagem()
         {
-            return _mensagens.Count > 0;
+            return ListaMensagens().Count > 0;
+        }
+
+        public bool ExisteMsgNaoEncontrado()
+        {
+            return ListaMensagens()
+                .Any(m => m.Key.Equals(MSG_NAO_ENCONTRADO));
         }
 
         public IEnumerable<string> Mensagens()
         {
-            return _mensagens;
+            return ListaMensagens().Values;
+        }
+
+        public IEnumerable<string> MensagensDeNaoEncontrado()
+        {
+            return ListaMensagens()
+                .Where(m => m.Key.Equals(MSG_NAO_ENCONTRADO))
+                .Select(m => m.Value);
         }
     }
 }

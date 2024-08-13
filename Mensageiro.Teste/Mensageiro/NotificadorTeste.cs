@@ -2,7 +2,7 @@ using Bogus;
 using Mensageiro.Excecoes;
 using System.ComponentModel;
 
-namespace Mensageiro.Teste
+namespace Mensageiro.Teste.Mensageiro
 {
     public class NotificadorTeste
     {
@@ -39,6 +39,7 @@ namespace Mensageiro.Teste
         internal void DeveAdicionarMensagemEmEnum()
         {
             var notificador = new Notificador();
+
             notificador.AddMensagem(EMensagemTeste.MensagemTeste);
 
             Assert.True(notificador.ExisteMensagem());
@@ -56,6 +57,61 @@ namespace Mensageiro.Teste
             var notificador = new Notificador();
 
             var excecao = Assert.Throws<MensageiroExcecao>(() => notificador.AddMensagem(msgInvalida));
+
+            Assert.IsType<MensageiroExcecao>(excecao);
+        }
+
+        [Fact]
+        internal void DeveAdicionarMensagemEmStringDeNaoEncontrado()
+        {
+            var msg = _faker.Lorem.Sentence();
+            var notificador = new Notificador();
+
+            notificador.AddMensagemNaoEncontrado(msg);
+
+            Assert.True(notificador.ExisteMsgNaoEncontrado());
+            var mensagemCriada = notificador.MensagensDeNaoEncontrado().First();
+            Assert.Equal(msg, mensagemCriada);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        internal void NaoDeveAdicionarMensagemEmStringVaziaDeNaoEncontrado(string msgInvalida)
+        {
+            var notificador = new Notificador();
+
+            notificador.AddMensagem(msgInvalida);
+
+            Assert.False(notificador.ExisteMsgNaoEncontrado());
+            Assert.False(notificador.ExisteMensagem());
+            Assert.False(notificador.MensagensDeNaoEncontrado().Any());
+            Assert.False(notificador.Mensagens().Any());
+        }
+
+        [Fact]
+        internal void DeveAdicionarMensagemEmEnumDeNaoEncontrado()
+        {
+            var notificador = new Notificador();
+
+            notificador.AddMensagemNaoEncontrado(EMensagemTeste.MensagemTeste);
+
+            Assert.True(notificador.ExisteMsgNaoEncontrado());
+            var mensagemCriada = notificador.MensagensDeNaoEncontrado().First();
+            var enumMsgEmString = Descricao(EMensagemTeste.MensagemTeste);
+            Assert.Equal(enumMsgEmString, mensagemCriada);
+        }
+
+        [Theory]
+        [InlineData(EMensagemTeste.MensagemTesteDescricaoSemParametro)]
+        [InlineData(EMensagemTeste.MensagemTesteDescricaoVazia)]
+        [InlineData(EMensagemTeste.MensagemTesteDescricaoEspacoEmBranco)]
+        internal void DeveRetornarExcecaoAoAdicionarMensagemEmEnumVaziaDeNaoEncontrado(EMensagemTeste msgInvalida)
+        {
+            var notificador = new Notificador();
+
+            var excecao = Assert.Throws<MensageiroExcecao>(() => notificador.AddMensagemNaoEncontrado(msgInvalida));
 
             Assert.IsType<MensageiroExcecao>(excecao);
         }
