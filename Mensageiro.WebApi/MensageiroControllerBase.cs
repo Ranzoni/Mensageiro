@@ -10,7 +10,10 @@ namespace Mensageiro.WebApi
             if (actionResultMensagemValidacao is not null)
                 return actionResultMensagemValidacao;
 
-            return StatusCode(201, retorno);
+            if (retorno is null)
+                return StatusCode(201);
+            else
+                return StatusCode(201, retorno);
         }
 
         protected ActionResult Sucesso(object retorno)
@@ -20,6 +23,18 @@ namespace Mensageiro.WebApi
                 return actionResultMensagemValidacao;
 
             return Ok(retorno);
+        }
+
+        protected ActionResult RetornarStatus(int statusCode, object? retorno)
+        {
+            var actionResultMensagemValidacao = VerificarMensagens();
+            if (actionResultMensagemValidacao is not null)
+                return actionResultMensagemValidacao;
+
+            if (retorno is null)
+                return StatusCode(statusCode);
+            else
+                return StatusCode(statusCode, retorno);
         }
 
         private ActionResult? VerificarMensagens()
