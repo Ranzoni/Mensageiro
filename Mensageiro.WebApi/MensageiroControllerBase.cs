@@ -2,7 +2,7 @@
 
 namespace Mensageiro.WebApi
 {
-    public abstract class MensageiroControllerBase(INotificador _notificador) : ControllerBase
+    public abstract class MensageiroControllerBase(INotificador _notificador, int? _statusCodeNotificador = null) : ControllerBase
     {
         protected ActionResult<T?> CriadoComSucesso<T>(T? retorno)
         {
@@ -28,7 +28,10 @@ namespace Mensageiro.WebApi
                 return NotFound(_notificador.MensagensDeNaoEncontrado());
 
             if (_notificador.ExisteMensagem())
-                return UnprocessableEntity(_notificador.Mensagens());
+                if (_statusCodeNotificador is not null)
+                    return StatusCode(_statusCodeNotificador ?? 0, _notificador.Mensagens());
+                else
+                    return UnprocessableEntity(_notificador.Mensagens());
 
             return null;
         }

@@ -79,6 +79,32 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
         }
 
         [Fact]
+        internal void DeveRetornaStatusPersonalizadoParaCriadoComSucesso()
+        {
+            var entidade = new
+            {
+                Nome = "Fulano"
+            };
+            var statusCode = 400;
+            var (controller, notificador) = CriarControllerTeste(statusCode);
+            var mensagem = _faker.Lorem.Sentences();
+            notificador.AddMensagem(mensagem);
+
+            var retorno = controller.CriarEntidade(entidade);
+
+            Assert.NotNull(retorno.Result);
+            Assert.IsType<ObjectResult>(retorno.Result);
+            if (retorno.Result is ObjectResult objResult)
+            {
+                var valueCollection = objResult.Value as IEnumerable<string>;
+                var mensagens = valueCollection?.ToList();
+                Assert.Equal(mensagem, mensagens?.FirstOrDefault());
+            }
+            Assert.Equal(statusCode, ((IStatusCodeActionResult)retorno.Result).StatusCode);
+            Assert.NotEmpty(notificador.Mensagens());
+        }
+
+        [Fact]
         internal void DeveRetornarOk()
         {
             var id = Guid.NewGuid();
@@ -142,16 +168,39 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.NotEmpty(notificador.Mensagens());
         }
 
-        private static (ControllerTeste controller, Notificador notificador) CriarControllerTeste()
+        [Fact]
+        internal void DeveRetornarStatusPersonalizadoParaOk()
+        {
+            var id = Guid.NewGuid();
+            var statusCode = 400;
+            var (controller, notificador) = CriarControllerTeste(statusCode);
+            var mensagem = _faker.Lorem.Sentences();
+            notificador.AddMensagem(mensagem);
+
+            var retorno = controller.BuscarEntidade(id);
+
+            Assert.NotNull(retorno.Result);
+            Assert.IsType<ObjectResult>(retorno.Result);
+            if (retorno.Result is ObjectResult objRessult)
+            {
+                var valueCollection = objRessult.Value as IEnumerable<string>;
+                var mensagens = valueCollection?.ToList();
+                Assert.Equal(mensagem, mensagens?.FirstOrDefault());
+            }
+            Assert.Equal(statusCode, ((IStatusCodeActionResult)retorno.Result).StatusCode);
+            Assert.NotEmpty(notificador.Mensagens());
+        }
+
+        private static (ControllerTeste controller, Notificador notificador) CriarControllerTeste(int? statusCodeMensageiro = null)
         {
             var notificador = new Notificador();
-            var controller = new ControllerTeste(notificador);
+            var controller = new ControllerTeste(notificador, statusCodeMensageiro);
 
             return (controller, notificador);
         }
     }
 
-    internal class ControllerTeste(INotificador notificador) : MensageiroControllerBase(notificador)
+    internal class ControllerTeste(INotificador notificador, int? statusCodeMensageiro = null) : MensageiroControllerBase(notificador, statusCodeMensageiro)
     {
         internal ActionResult<object?> CriarEntidade(object entidade)
         {
