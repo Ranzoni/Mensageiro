@@ -191,6 +191,70 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.NotEmpty(notificador.Mensagens());
         }
 
+        [Fact]
+        internal void DeveRetornarStatusEspecifico()
+        {
+            var id = Guid.NewGuid();
+            var (controller, notificador) = CriarControllerTeste();
+
+            var retorno = controller.BuscarEntidadeComStatusEspecifico(id);
+
+            Assert.NotNull(retorno.Result);
+            Assert.IsType<ObjectResult>(retorno.Result);
+            if (retorno.Result is ObjectResult objResult)
+            {
+                var entidade = objResult.Value;
+                var idRetornado = entidade?.GetType().GetProperty("Id")?.GetValue(entidade);
+                Assert.Equal(id, idRetornado);
+            }
+            Assert.Equal(202, ((IStatusCodeActionResult)retorno.Result).StatusCode);
+            Assert.Empty(notificador.Mensagens());
+        }
+
+        [Fact]
+        internal void NaoDeveRetornarStatusEspecifico()
+        {
+            var id = Guid.NewGuid();
+            var (controller, notificador) = CriarControllerTeste();
+            var mensagem = _faker.Lorem.Sentences();
+            notificador.AddMensagem(mensagem);
+
+            var retorno = controller.BuscarEntidadeComStatusEspecifico(id);
+
+            Assert.NotNull(retorno.Result);
+            Assert.IsType<UnprocessableEntityObjectResult>(retorno.Result);
+            if (retorno.Result is UnprocessableEntityObjectResult unprocessable)
+            {
+                var valueCollection = unprocessable.Value as Dictionary<string, string>.ValueCollection;
+                var mensagens = valueCollection?.ToList();
+                Assert.Equal(mensagem, mensagens?.FirstOrDefault());
+            }
+            Assert.Equal(422, ((IStatusCodeActionResult)retorno.Result).StatusCode);
+            Assert.NotEmpty(notificador.Mensagens());
+        }
+
+        [Fact]
+        internal void DeveRetornarNaoEncontradoStatusEspecifico()
+        {
+            var id = Guid.NewGuid();
+            var (controller, notificador) = CriarControllerTeste();
+            var mensagem = _faker.Lorem.Sentences();
+            notificador.AddMensagemNaoEncontrado(mensagem);
+
+            var retorno = controller.BuscarEntidadeComStatusEspecifico(id);
+
+            Assert.NotNull(retorno.Result);
+            Assert.IsType<NotFoundObjectResult>(retorno.Result);
+            if (retorno.Result is NotFoundObjectResult notFound)
+            {
+                var valueCollection = notFound.Value as IEnumerable<string>;
+                var mensagens = valueCollection?.ToList();
+                Assert.Equal(mensagem, mensagens?.FirstOrDefault());
+            }
+            Assert.Equal(404, ((IStatusCodeActionResult)retorno.Result).StatusCode);
+            Assert.NotEmpty(notificador.Mensagens());
+        }
+
         private static (ControllerTeste controller, Notificador notificador) CriarControllerTeste(int? statusCodeMensageiro = null)
         {
             var notificador = new Notificador();
@@ -216,6 +280,17 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             };
 
             return Sucesso(entidade);
+        }
+
+        internal ActionResult<object?> BuscarEntidadeComStatusEspecifico(Guid id)
+        {
+            var entidade = new
+            {
+                Id = id,
+                Nome = "Fulano"
+            };
+
+            return RetornarStatus(202, entidade);
         }
     }
 }
