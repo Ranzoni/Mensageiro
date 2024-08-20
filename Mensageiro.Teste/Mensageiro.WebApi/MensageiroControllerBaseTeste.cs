@@ -255,6 +255,21 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.NotEmpty(notificador.Mensagens());
         }
 
+        [Fact]
+        internal void DeveRetornarNotificador()
+        {
+            var msg = _faker.Lorem.Sentences();
+            var (controller, notificador) = CriarControllerTeste();
+
+            var retorno = controller.RetornarNotificador();
+            retorno.AddMensagem(msg);
+
+            Assert.NotNull(retorno);
+            Assert.Equal(notificador, retorno);
+            Assert.True(notificador.ExisteMensagem());
+            Assert.Equal(msg, notificador.Mensagens().First());
+        }
+
         private static (ControllerTeste controller, Notificador notificador) CriarControllerTeste(int? statusCodeMensageiro = null)
         {
             var notificador = new Notificador();
@@ -291,6 +306,11 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             };
 
             return RetornarStatus(202, entidade);
+        }
+
+        internal INotificador RetornarNotificador()
+        {
+            return Notificador();
         }
     }
 }
