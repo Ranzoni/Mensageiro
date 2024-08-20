@@ -34,7 +34,7 @@ jobs:
       run: dotnet pack ./Mensageiro/Mensageiro.csproj --configuration Release --output ./nupkg/Mensageiro
 
     - name: Publish Mensageiro to NuGet
-      run: dotnet nuget push ./nupkg/Mensageiro/*.nupkg --api-key ${{ secrets.NUGET_MENSAGEIRO_API_KEY }} --source https://api.nuget.org/v3/index.json -skip-duplicate
+      run: dotnet nuget push ./nupkg/Mensageiro/*.nupkg --api-key ${{ secrets.NUGET_MENSAGEIRO_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
     # Mensageiro.WebAPI Project
     - name: Restore dependencies from Mensageiro.WebAPI
@@ -47,4 +47,4 @@ jobs:
       run: dotnet pack ./Mensageiro.WebApi/Mensageiro.WebApi.csproj --configuration Release --output ./nupkg/Mensageiro.WebAPI
 
     - name: Publish Mensageiro.WebAPI to NuGet
-      run: dotnet nuget push ./nupkg/Mensageiro.WebAPI/*.nupkg --api-key ${{ secrets.NUGET_MENSAGEIRO_WEBAPI_API_KEY }} --source https://api.nuget.org/v3/index.json -skip-duplicate
+      run: dotnet nuget push ./nupkg/Mensageiro.WebAPI/*.nupkg --api-key ${{ secrets.NUGET_MENSAGEIRO_WEBAPI_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
