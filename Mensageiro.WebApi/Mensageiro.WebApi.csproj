@@ -21,7 +21,7 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Include="C:\Users\felip\Downloads\mensageiro_icone.png">
+    <None Include="..\Assets\mensageiro_icone.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
