@@ -4,6 +4,24 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Title>O Mensageiro</Title>
+    <Description>O mensageiro é um pacote para você gerenciar notificações na sua aplicação. Ele nada mais é do que uma lista que permite consultar e adicionar mensagens.</Description>
+    <PackageProjectUrl>https://github.com/Ranzoni/Mensageiro</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Ranzoni/Mensageiro</RepositoryUrl>
+    <NeutralLanguage>pt-BR</NeutralLanguage>
+    <PackageIcon>mensageiro_icone.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="C:\Users\felip\Downloads\mensageiro_icone.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
