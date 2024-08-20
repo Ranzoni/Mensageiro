@@ -4,7 +4,7 @@ namespace Mensageiro.WebApi
 {
     public abstract class MensageiroControllerBase(INotificador _notificador, int? _statusCodeNotificador = null) : ControllerBase
     {
-        protected ActionResult<T?> CriadoComSucesso<T>(T? retorno)
+        public ActionResult<T?> CriadoComSucesso<T>(T? retorno)
         {
             var actionResultMensagemValidacao = VerificarMensagens();
             if (actionResultMensagemValidacao is not null)
@@ -16,7 +16,7 @@ namespace Mensageiro.WebApi
                 return StatusCode(201, retorno);
         }
 
-        protected ActionResult Sucesso(object retorno)
+        public ActionResult Sucesso(object retorno)
         {
             var actionResultMensagemValidacao = VerificarMensagens();
             if (actionResultMensagemValidacao is not null)
@@ -25,7 +25,7 @@ namespace Mensageiro.WebApi
             return Ok(retorno);
         }
 
-        protected ActionResult RetornarStatus(int statusCode, object? retorno)
+        public ActionResult RetornarStatus(int statusCode, object? retorno)
         {
             var actionResultMensagemValidacao = VerificarMensagens();
             if (actionResultMensagemValidacao is not null)
@@ -51,7 +51,7 @@ namespace Mensageiro.WebApi
             return null;
         }
 
-        protected INotificador Notificador()
+        public INotificador Notificador()
         {
             return _notificador;
         }
