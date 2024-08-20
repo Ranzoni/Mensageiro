@@ -50,5 +50,10 @@ namespace Mensageiro.WebApi
 
             return null;
         }
+
+        protected INotificador Notificador()
+        {
+            return _notificador;
+        }
     }
 }
