@@ -1,0 +1,48 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Publish NuGet Package
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    # Mensageiro Project
+    - name: Restore dependencies from Mensageiro
+      run: dotnet restore ./Mensageiro/Mensageiro.csproj
+
+    - name: Build Mensageiro
+      run: dotnet build --no-restore ./Mensageiro/Mensageiro.csproj --configuration Release
+
+    - name: Pack the project Mensageiro
+      run: dotnet pack ./Mensageiro/Mensageiro.csproj --configuration Release --output ./nupkg/Mensageiro
+
+    - name: Publish Mensageiro to NuGet
+      run: dotnet nuget push ./nupkg/Mensageiro/*.nupkg --api-key ${{ secrets.NUGET_MENSAGEIRO_API_KEY }} --source https://api.nuget.org/v3/index.json
+
+    # Mensageiro.WebAPI Project
+    - name: Restore dependencies from Mensageiro.WebAPI
+      run: dotnet restore ./Mensageiro.WebApi/Mensageiro.WebApi.csproj
+
+    - name: Build Mensageiro.WebAPI
+      run: dotnet build --no-restore ./Mensageiro.WebApi/Mensageiro.WebApi.csproj --configuration Release
+
+    - name: Pack the project Mensageiro.WebAPI
+      run: dotnet pack ./Mensageiro.WebApi/Mensageiro.WebApi.csproj --configuration Release --output ./nupkg/Mensageiro.WebAPI
+
+    - name: Publish Mensageiro.WebAPI to NuGet
+      run: dotnet nuget push ./nupkg/Mensageiro.WebAPI/*.nupkg --api-key ${{ secrets.NUGET_MENSAGEIRO_WEBAPI_API_KEY }} --source https://api.nuget.org/v3/index.json
