@@ -4,7 +4,7 @@ namespace Mensageiro.WebApi
 {
     public abstract class MensageiroControllerBase(INotificador _notificador, int? _statusCodeNotificador = null) : ControllerBase
     {
-        public ActionResult<T?> CriadoComSucesso<T>(T? retorno)
+        protected ActionResult<T?> CriadoComSucesso<T>(T? retorno)
         {
             var actionResultMensagemValidacao = VerificarMensagens();
             if (actionResultMensagemValidacao is not null)
@@ -16,7 +16,7 @@ namespace Mensageiro.WebApi
                 return StatusCode(201, retorno);
         }
 
-        public ActionResult Sucesso(object retorno)
+        protected ActionResult Sucesso(object retorno)
         {
             var actionResultMensagemValidacao = VerificarMensagens();
             if (actionResultMensagemValidacao is not null)
@@ -25,7 +25,7 @@ namespace Mensageiro.WebApi
             return Ok(retorno);
         }
 
-        public ActionResult RetornarStatus(int statusCode, object? retorno)
+        protected ActionResult RetornarStatus(int statusCode, object? retorno)
         {
             var actionResultMensagemValidacao = VerificarMensagens();
             if (actionResultMensagemValidacao is not null)
@@ -40,18 +40,47 @@ namespace Mensageiro.WebApi
         private ActionResult? VerificarMensagens()
         {
             if (_notificador.ExisteMsgNaoEncontrado())
-                return NotFound(_notificador.MensagensDeNaoEncontrado());
+            {
+                var listaMsgs = RetornarNotificacaoResposta(_notificador.MensagensDeNaoEncontrado());
+                return NotFound(listaMsgs);
+            }
 
             if (_notificador.ExisteMensagem())
+            {
                 if (_statusCodeNotificador is not null)
-                    return StatusCode(_statusCodeNotificador ?? 0, _notificador.Mensagens());
+                {
+                    var listaMsgs = RetornarNotificacaoResposta(_notificador.Mensagens());
+                    return StatusCode(_statusCodeNotificador ?? 0, listaMsgs);
+                }
                 else
-                    return UnprocessableEntity(_notificador.Mensagens());
+                {
+                    var listaMsgs = RetornarNotificacaoResposta(_notificador.Mensagens());
+                    return UnprocessableEntity(listaMsgs);
+                }
+            }
 
             return null;
         }
 
-        public INotificador Notificador()
+        private static List<NotificacaoResposta> RetornarNotificacaoResposta(IEnumerable<string> mensagens)
+        {
+            var listaNotificacoesResposta = new List<NotificacaoResposta>();
+
+            var construtor = new NotificacaoRespostaConstrutor();
+
+            foreach (var mensagem in mensagens)
+            {
+                var notificacaoResposta = construtor
+                    .ComMensagem(mensagem)
+                    .Construir();
+
+                listaNotificacoesResposta.Add(notificacaoResposta);
+            }
+
+            return listaNotificacoesResposta;
+        }
+
+        protected INotificador Notificador()
         {
             return _notificador;
         }
