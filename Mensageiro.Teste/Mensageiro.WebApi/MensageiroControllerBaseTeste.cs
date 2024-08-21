@@ -45,9 +45,8 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<UnprocessableEntityObjectResult>(retorno.Result);
             if (retorno.Result is UnprocessableEntityObjectResult unprocessable)
             {
-                var valueCollection = unprocessable.Value as Dictionary<string, string>.ValueCollection;
-                var mensagens = valueCollection?.ToList();
-                Assert.Equal(mensagem, mensagens?.FirstOrDefault());
+                var notificacoes = unprocessable.Value as IEnumerable<NotificacaoResposta>;
+                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
             }
             Assert.Equal(422, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
@@ -70,9 +69,8 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<NotFoundObjectResult>(retorno.Result);
             if (retorno.Result is NotFoundObjectResult notFound)
             {
-                var valueCollection = notFound.Value as IEnumerable<string>;
-                var mensagens = valueCollection?.ToList();
-                Assert.Equal(mensagem, mensagens?.FirstOrDefault());
+                var notificacoes = notFound.Value as IEnumerable<NotificacaoResposta>;
+                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
             }
             Assert.Equal(404, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
@@ -96,9 +94,8 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<ObjectResult>(retorno.Result);
             if (retorno.Result is ObjectResult objResult)
             {
-                var valueCollection = objResult.Value as IEnumerable<string>;
-                var mensagens = valueCollection?.ToList();
-                Assert.Equal(mensagem, mensagens?.FirstOrDefault());
+                var notificacoes = objResult.Value as IEnumerable<NotificacaoResposta>;
+                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
             }
             Assert.Equal(statusCode, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
@@ -138,9 +135,8 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<UnprocessableEntityObjectResult>(retorno.Result);
             if (retorno.Result is UnprocessableEntityObjectResult unprocessable)
             {
-                var valueCollection = unprocessable.Value as Dictionary<string, string>.ValueCollection;
-                var mensagens = valueCollection?.ToList();
-                Assert.Equal(mensagem, mensagens?.FirstOrDefault());
+                var notificacoes = unprocessable.Value as IEnumerable<NotificacaoResposta>;
+                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
             }
             Assert.Equal(422, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
@@ -160,9 +156,8 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<NotFoundObjectResult>(retorno.Result);
             if (retorno.Result is NotFoundObjectResult notFound)
             {
-                var valueCollection = notFound.Value as IEnumerable<string>;
-                var mensagens = valueCollection?.ToList();
-                Assert.Equal(mensagem, mensagens?.FirstOrDefault());
+                var notificacoes = notFound.Value as IEnumerable<NotificacaoResposta>;
+                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
             }
             Assert.Equal(404, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
@@ -181,11 +176,10 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
 
             Assert.NotNull(retorno.Result);
             Assert.IsType<ObjectResult>(retorno.Result);
-            if (retorno.Result is ObjectResult objRessult)
+            if (retorno.Result is ObjectResult objResult)
             {
-                var valueCollection = objRessult.Value as IEnumerable<string>;
-                var mensagens = valueCollection?.ToList();
-                Assert.Equal(mensagem, mensagens?.FirstOrDefault());
+                var notificacoes = objResult.Value as IEnumerable<NotificacaoResposta>;
+                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
             }
             Assert.Equal(statusCode, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
@@ -225,9 +219,8 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<UnprocessableEntityObjectResult>(retorno.Result);
             if (retorno.Result is UnprocessableEntityObjectResult unprocessable)
             {
-                var valueCollection = unprocessable.Value as Dictionary<string, string>.ValueCollection;
-                var mensagens = valueCollection?.ToList();
-                Assert.Equal(mensagem, mensagens?.FirstOrDefault());
+                var notificacoes = unprocessable.Value as IEnumerable<NotificacaoResposta>;
+                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
             }
             Assert.Equal(422, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
@@ -247,9 +240,8 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<NotFoundObjectResult>(retorno.Result);
             if (retorno.Result is NotFoundObjectResult notFound)
             {
-                var valueCollection = notFound.Value as IEnumerable<string>;
-                var mensagens = valueCollection?.ToList();
-                Assert.Equal(mensagem, mensagens?.FirstOrDefault());
+                var notificacoes = notFound.Value as IEnumerable<NotificacaoResposta>;
+                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
             }
             Assert.Equal(404, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
