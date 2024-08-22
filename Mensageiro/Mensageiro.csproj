@@ -11,6 +11,7 @@
     <RepositoryUrl>https://github.com/Ranzoni/Mensageiro</RepositoryUrl>
     <NeutralLanguage>pt-BR</NeutralLanguage>
     <PackageIcon>mensageiro_icone.png</PackageIcon>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
