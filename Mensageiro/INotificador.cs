@@ -22,7 +22,7 @@
         /// </summary>
         /// <param name="mensagem"></param>
         void AddMensagemNaoEncontrado(string mensagem);
-        // <summary>
+        /// <summary>
         /// Adiciona uma mensagem de não encontrado do tipo enum ao notificador.
         /// É o mesmo efeito do AddMensagem, porém é adicionada uma identificação para a mensagem de "não encontrado".
         /// </summary>
