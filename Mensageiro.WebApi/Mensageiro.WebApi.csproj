@@ -10,7 +10,8 @@
     <PackageIcon>mensageiro_icone.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/Ranzoni/Mensageiro</RepositoryUrl>
-    <Version>1.0.4</Version>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Version>1.0.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
