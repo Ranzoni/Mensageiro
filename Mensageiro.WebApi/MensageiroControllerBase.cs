@@ -35,7 +35,7 @@ namespace Mensageiro.WebApi
         /// </summary>
         /// <param name="retorno"></param>
         /// <returns></returns>
-        protected ActionResult Sucesso(object retorno)
+        protected ActionResult Sucesso(object? retorno)
         {
             var actionResultMensagemValidacao = VerificarMensagens();
             if (actionResultMensagemValidacao is not null)
