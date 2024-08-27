@@ -2,11 +2,11 @@
 
 namespace Mensageiro.WebApi
 {
-    public class NotificacaoResposta
+    internal class NotificacaoResposta
     {
-        public string Mensagem { get; private set; }
+        internal string Mensagem { get; private set; }
 
-        public NotificacaoResposta(string mensagem)
+        internal NotificacaoResposta(string mensagem)
         {
             if (string.IsNullOrEmpty(mensagem) || string.IsNullOrWhiteSpace(mensagem))
                 NotificacaoRespostaException.MensagemNaoPreenchida();

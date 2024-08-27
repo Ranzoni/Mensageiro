@@ -2,6 +2,7 @@
 using Mensageiro.WebApi;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Reflection;
 
 namespace Mensageiro.Teste.Mensageiro.WebApi
 {
@@ -45,10 +46,36 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<UnprocessableEntityObjectResult>(retorno.Result);
             if (retorno.Result is UnprocessableEntityObjectResult unprocessable)
             {
-                var notificacoes = unprocessable.Value as IEnumerable<NotificacaoResposta>;
-                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
+                var notificacoes = unprocessable.Value as IEnumerable<object>;
+                var objeto = notificacoes?.FirstOrDefault();
+                Assert.Equal(mensagem, objeto?.GetType()?.GetProperty("Mensagem", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(objeto));
             }
             Assert.Equal(422, ((IStatusCodeActionResult)retorno.Result).StatusCode);
+            Assert.NotEmpty(notificador.Mensagens());
+        }
+
+        [Fact]
+        internal void DeveRetornarNaoAutorizadoParaCriadoComSucesso()
+        {
+            var entidade = new
+            {
+                Nome = "Fulano"
+            };
+            var (controller, notificador) = CriarControllerTeste();
+            var mensagem = "Não autorizado";
+            notificador.AddMensagemNaoAutorizado(mensagem);
+
+            var retorno = controller.CriarEntidade(entidade);
+
+            Assert.NotNull(retorno.Result);
+            Assert.IsType<UnauthorizedObjectResult>(retorno.Result);
+            if (retorno.Result is UnauthorizedObjectResult unauthorized)
+            {
+                var notificacoes = unauthorized.Value as IEnumerable<object>;
+                var objeto = notificacoes?.FirstOrDefault();
+                Assert.Equal(mensagem, objeto?.GetType()?.GetProperty("Mensagem", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(objeto));
+            }
+            Assert.Equal(401, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
         }
 
@@ -69,8 +96,9 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<NotFoundObjectResult>(retorno.Result);
             if (retorno.Result is NotFoundObjectResult notFound)
             {
-                var notificacoes = notFound.Value as IEnumerable<NotificacaoResposta>;
-                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
+                var notificacoes = notFound.Value as IEnumerable<object>;
+                var objeto = notificacoes?.FirstOrDefault();
+                Assert.Equal(mensagem, objeto?.GetType()?.GetProperty("Mensagem", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(objeto));
             }
             Assert.Equal(404, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
@@ -94,8 +122,9 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<ObjectResult>(retorno.Result);
             if (retorno.Result is ObjectResult objResult)
             {
-                var notificacoes = objResult.Value as IEnumerable<NotificacaoResposta>;
-                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
+                var notificacoes = objResult.Value as IEnumerable<object>;
+                var objeto = notificacoes?.FirstOrDefault();
+                Assert.Equal(mensagem, objeto?.GetType()?.GetProperty("Mensagem", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(objeto));
             }
             Assert.Equal(statusCode, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
@@ -135,10 +164,33 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<UnprocessableEntityObjectResult>(retorno.Result);
             if (retorno.Result is UnprocessableEntityObjectResult unprocessable)
             {
-                var notificacoes = unprocessable.Value as IEnumerable<NotificacaoResposta>;
-                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
+                var notificacoes = unprocessable.Value as IEnumerable<object>;
+                var objeto = notificacoes?.FirstOrDefault();
+                Assert.Equal(mensagem, objeto?.GetType()?.GetProperty("Mensagem", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(objeto));
             }
             Assert.Equal(422, ((IStatusCodeActionResult)retorno.Result).StatusCode);
+            Assert.NotEmpty(notificador.Mensagens());
+        }
+
+        [Fact]
+        internal void DeveRetornarNaoAutorizadoParaOk()
+        {
+            var id = Guid.NewGuid();
+            var (controller, notificador) = CriarControllerTeste();
+            var mensagem = "Não encontrado";
+            notificador.AddMensagemNaoAutorizado(mensagem);
+
+            var retorno = controller.BuscarEntidade(id);
+
+            Assert.NotNull(retorno.Result);
+            Assert.IsType<UnauthorizedObjectResult>(retorno.Result);
+            if (retorno.Result is UnauthorizedObjectResult unauthorized)
+            {
+                var notificacoes = unauthorized.Value as IEnumerable<object>;
+                var objeto = notificacoes?.FirstOrDefault();
+                Assert.Equal(mensagem, objeto?.GetType()?.GetProperty("Mensagem", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(objeto));
+            }
+            Assert.Equal(401, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
         }
 
@@ -156,8 +208,9 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<NotFoundObjectResult>(retorno.Result);
             if (retorno.Result is NotFoundObjectResult notFound)
             {
-                var notificacoes = notFound.Value as IEnumerable<NotificacaoResposta>;
-                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
+                var notificacoes = notFound.Value as IEnumerable<object>;
+                var objeto = notificacoes?.FirstOrDefault();
+                Assert.Equal(mensagem, objeto?.GetType()?.GetProperty("Mensagem", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(objeto));
             }
             Assert.Equal(404, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
@@ -178,8 +231,9 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<ObjectResult>(retorno.Result);
             if (retorno.Result is ObjectResult objResult)
             {
-                var notificacoes = objResult.Value as IEnumerable<NotificacaoResposta>;
-                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
+                var notificacoes = objResult.Value as IEnumerable<object>;
+                var objeto = notificacoes?.FirstOrDefault();
+                Assert.Equal(mensagem, objeto?.GetType()?.GetProperty("Mensagem", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(objeto));
             }
             Assert.Equal(statusCode, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
@@ -219,10 +273,33 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<UnprocessableEntityObjectResult>(retorno.Result);
             if (retorno.Result is UnprocessableEntityObjectResult unprocessable)
             {
-                var notificacoes = unprocessable.Value as IEnumerable<NotificacaoResposta>;
-                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
+                var notificacoes = unprocessable.Value as IEnumerable<object>;
+                var objeto = notificacoes?.FirstOrDefault();
+                Assert.Equal(mensagem, objeto?.GetType()?.GetProperty("Mensagem", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(objeto));
             }
             Assert.Equal(422, ((IStatusCodeActionResult)retorno.Result).StatusCode);
+            Assert.NotEmpty(notificador.Mensagens());
+        }
+
+        [Fact]
+        internal void DeveRetornarNaoAutorizadoStatusEspecifico()
+        {
+            var id = Guid.NewGuid();
+            var (controller, notificador) = CriarControllerTeste();
+            var mensagem = _faker.Lorem.Sentences();
+            notificador.AddMensagemNaoAutorizado(mensagem);
+
+            var retorno = controller.BuscarEntidadeComStatusEspecifico(id);
+
+            Assert.NotNull(retorno.Result);
+            Assert.IsType<UnauthorizedObjectResult>(retorno.Result);
+            if (retorno.Result is UnauthorizedObjectResult unauthorized)
+            {
+                var notificacoes = unauthorized.Value as IEnumerable<object>;
+                var objeto = notificacoes?.FirstOrDefault();
+                Assert.Equal(mensagem, objeto?.GetType()?.GetProperty("Mensagem", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(objeto));
+            }
+            Assert.Equal(401, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());
         }
 
@@ -240,8 +317,9 @@ namespace Mensageiro.Teste.Mensageiro.WebApi
             Assert.IsType<NotFoundObjectResult>(retorno.Result);
             if (retorno.Result is NotFoundObjectResult notFound)
             {
-                var notificacoes = notFound.Value as IEnumerable<NotificacaoResposta>;
-                Assert.Equal(mensagem, notificacoes?.FirstOrDefault()?.Mensagem);
+                var notificacoes = notFound.Value as IEnumerable<object>;
+                var objeto = notificacoes?.FirstOrDefault();
+                Assert.Equal(mensagem, objeto?.GetType()?.GetProperty("Mensagem", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(objeto));
             }
             Assert.Equal(404, ((IStatusCodeActionResult)retorno.Result).StatusCode);
             Assert.NotEmpty(notificador.Mensagens());

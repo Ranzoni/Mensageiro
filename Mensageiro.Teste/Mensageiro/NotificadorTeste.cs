@@ -82,7 +82,7 @@ namespace Mensageiro.Teste.Mensageiro
         {
             var notificador = new Notificador();
 
-            notificador.AddMensagem(msgInvalida);
+            notificador.AddMensagemNaoEncontrado(msgInvalida);
 
             Assert.False(notificador.ExisteMsgNaoEncontrado());
             Assert.False(notificador.ExisteMensagem());
@@ -112,6 +112,61 @@ namespace Mensageiro.Teste.Mensageiro
             var notificador = new Notificador();
 
             var excecao = Assert.Throws<MensageiroExcecao>(() => notificador.AddMensagemNaoEncontrado(msgInvalida));
+
+            Assert.IsType<MensageiroExcecao>(excecao);
+        }
+
+        [Fact]
+        internal void DeveAdicionarMensagemEmStringDeNaoAutorizado()
+        {
+            var msg = _faker.Lorem.Sentence();
+            var notificador = new Notificador();
+
+            notificador.AddMensagemNaoAutorizado(msg);
+
+            Assert.True(notificador.ExisteMsgNaoAutorizado());
+            var mensagemCriada = notificador.MensagensDeNaoAutorizado().First();
+            Assert.Equal(msg, mensagemCriada);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        internal void NaoDeveAdicionarMensagemEmStringVaziaDeNaoAutorizado(string msgInvalida)
+        {
+            var notificador = new Notificador();
+
+            notificador.AddMensagemNaoAutorizado(msgInvalida);
+
+            Assert.False(notificador.ExisteMsgNaoAutorizado());
+            Assert.False(notificador.ExisteMensagem());
+            Assert.False(notificador.MensagensDeNaoAutorizado().Any());
+            Assert.False(notificador.Mensagens().Any());
+        }
+
+        [Fact]
+        internal void DeveAdicionarMensagemEmEnumDeNaoAutorizado()
+        {
+            var notificador = new Notificador();
+
+            notificador.AddMensagemNaoAutorizado(EMensagemTeste.MensagemTeste);
+
+            Assert.True(notificador.ExisteMsgNaoAutorizado());
+            var mensagemCriada = notificador.MensagensDeNaoAutorizado().First();
+            var enumMsgEmString = Descricao(EMensagemTeste.MensagemTeste);
+            Assert.Equal(enumMsgEmString, mensagemCriada);
+        }
+
+        [Theory]
+        [InlineData(EMensagemTeste.MensagemTesteDescricaoSemParametro)]
+        [InlineData(EMensagemTeste.MensagemTesteDescricaoVazia)]
+        [InlineData(EMensagemTeste.MensagemTesteDescricaoEspacoEmBranco)]
+        internal void DeveRetornarExcecaoAoAdicionarMensagemEmEnumVaziaDeNaoAutorizado(EMensagemTeste msgInvalida)
+        {
+            var notificador = new Notificador();
+
+            var excecao = Assert.Throws<MensageiroExcecao>(() => notificador.AddMensagemNaoAutorizado(msgInvalida));
 
             Assert.IsType<MensageiroExcecao>(excecao);
         }
