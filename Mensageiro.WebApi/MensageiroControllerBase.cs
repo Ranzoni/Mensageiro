@@ -65,6 +65,12 @@ namespace Mensageiro.WebApi
 
         private ActionResult? VerificarMensagens()
         {
+            if (_notificador.ExisteMsgNaoAutorizado())
+            {
+                var listaMsgs = RetornarNotificacaoResposta(_notificador.MensagensDeNaoAutorizado());
+                return Unauthorized(listaMsgs);
+            }
+
             if (_notificador.ExisteMsgNaoEncontrado())
             {
                 var listaMsgs = RetornarNotificacaoResposta(_notificador.MensagensDeNaoEncontrado());
