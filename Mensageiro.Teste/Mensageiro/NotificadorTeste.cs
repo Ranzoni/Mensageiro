@@ -21,6 +21,23 @@ namespace Mensageiro.Teste.Mensageiro
             Assert.Equal(msg, mensagemCriada);
         }
 
+        [Fact]
+        internal void DeveAdicionarVariasMensagensEmString()
+        {
+            var notificador = new Notificador();
+            var qtdMensagensParTeste = 2;
+
+            for (var i = 1; i <= qtdMensagensParTeste; i++)
+            {
+                var msg = _faker.Lorem.Sentence();
+                notificador.AddMensagem(msg);
+
+                Assert.Contains(msg, notificador.Mensagens());
+            }
+
+            Assert.Equal(qtdMensagensParTeste, notificador.Mensagens().Count());
+        }
+
         [Theory]
         [InlineData(null)]
         [InlineData("")]
