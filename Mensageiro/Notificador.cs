@@ -11,14 +11,14 @@ namespace Mensageiro
         const string MSG_NAO_ENCONTRADO = "NAO_ENCONTRADO";
         const string MSG_NAO_AUTORIZADO = "MSG_NAO_AUTORIZADO";
 
-        private readonly Dictionary<string, string> _mensagens = [];
+        private readonly List<(string tipoMensagem, string mensagem)> _mensagens = [];
 
         private void AddMensagemLista(string mensagem, string chave = MSG_PADRAO)
         {
             if (string.IsNullOrEmpty(chave) || string.IsNullOrWhiteSpace(chave))
                 chave = MSG_PADRAO;
 
-            _mensagens.Add(chave, mensagem);
+            _mensagens.Add((chave, mensagem));
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Mensageiro
         /// <returns></returns>
         public bool ExisteMsgNaoEncontrado()
         {
-            return _mensagens.Any(m => m.Key.Equals(MSG_NAO_ENCONTRADO));
+            return _mensagens.Any(m => m.tipoMensagem.Equals(MSG_NAO_ENCONTRADO));
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Mensageiro
         /// <returns></returns>
         public IEnumerable<string> Mensagens()
         {
-            return _mensagens.Values;
+            return _mensagens.Select(m => m.mensagem);
         }
 
         /// <summary>
@@ -120,8 +120,8 @@ namespace Mensageiro
         public IEnumerable<string> MensagensDeNaoEncontrado()
         {
             return _mensagens
-                .Where(m => m.Key.Equals(MSG_NAO_ENCONTRADO))
-                .Select(m => m.Value);
+                .Where(m => m.tipoMensagem.Equals(MSG_NAO_ENCONTRADO))
+                .Select(m => m.mensagem);
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace Mensageiro
         /// <returns></returns>
         public bool ExisteMsgNaoAutorizado()
         {
-            return _mensagens.Any(m => m.Key.Equals(MSG_NAO_AUTORIZADO));
+            return _mensagens.Any(m => m.tipoMensagem.Equals(MSG_NAO_AUTORIZADO));
         }
 
         /// <summary>
@@ -175,8 +175,8 @@ namespace Mensageiro
         public IEnumerable<string> MensagensDeNaoAutorizado()
         {
             return _mensagens
-                .Where(m => m.Key.Equals(MSG_NAO_AUTORIZADO))
-                .Select(m => m.Value);
+                .Where(m => m.tipoMensagem.Equals(MSG_NAO_AUTORIZADO))
+                .Select(m => m.mensagem);
         }
     }
 }
