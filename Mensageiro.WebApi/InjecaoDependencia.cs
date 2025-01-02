@@ -13,7 +13,7 @@ namespace Mensageiro.WebApi
         /// <param name="services"></param>
         public static void AddMensageiro(this IServiceCollection services)
         {
-            services.AddTransient<INotificador, Notificador>();
+            services.AddScoped<INotificador, Notificador>();
         }
     }
 }
