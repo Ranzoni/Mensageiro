@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Title>The Messenger WebAPI</Title>
+    <Version>1.0.0</Version>
+    <Description>It works in combination with The Messenger. It exposes the notifier messages, if any, to the ActionResult returns.</Description>
+    <Copyright></Copyright>
+    <PackageProjectUrl>https://github.com/Ranzoni/Mensageiro</PackageProjectUrl>
+    <PackageIcon>mensageiro_icone.png</PackageIcon>
+    <PackageReadmeFile></PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\Assets\mensageiro_icone.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Messenger\Messenger.csproj" />
+  </ItemGroup>
+
+</Project>
