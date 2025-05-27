@@ -19,7 +19,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.0.x
 
     # Mensageiro Project
     - name: Restore dependencies from Mensageiro
@@ -34,6 +34,19 @@ jobs:
     - name: Publish Mensageiro to NuGet
       run: dotnet nuget push ./nupkg/Mensageiro/*.nupkg --api-key ${{ secrets.NUGET_MENSAGEIRO_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
+    # Messenger Project
+    - name: Restore dependencies from Messenger
+      run: dotnet restore ./Messenger/Messenger.csproj
+
+    - name: Build Messenger
+      run: dotnet build --no-restore ./Messenger/Messenger.csproj --configuration Release
+
+    - name: Pack the project Messenger
+      run: dotnet pack ./Messenger/Messenger.csproj --configuration Release --output ./nupkg/Messenger
+
+    - name: Publish Mensageiro to NuGet
+      run: dotnet nuget push ./nupkg/Messenger/*.nupkg --api-key ${{ secrets.NUGET_MESSENGER_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
     # Mensageiro.WebAPI Project
     - name: Restore dependencies from Mensageiro.WebAPI
       run: dotnet restore ./Mensageiro.WebApi/Mensageiro.WebApi.csproj
@@ -46,3 +59,16 @@ jobs:
 
     - name: Publish Mensageiro.WebAPI to NuGet
       run: dotnet nuget push ./nupkg/Mensageiro.WebAPI/*.nupkg --api-key ${{ secrets.NUGET_MENSAGEIRO_WEBAPI_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+    # Messenger.WebAPI Project
+    - name: Restore dependencies from Messenger.WebAPI
+      run: dotnet restore ./Messenger.WebApi/Messenger.WebApi.csproj
+
+    - name: Build Messenger.WebAPI
+      run: dotnet build --no-restore ./Messenger.WebApi/Messenger.WebApi.csproj --configuration Release
+
+    - name: Pack the project Messenger.WebAPI
+      run: dotnet pack ./Messenger.WebApi/Messenger.WebApi.csproj --configuration Release --output ./nupkg/Messenger.WebAPI
+
+    - name: Publish Messenger.WebAPI to NuGet
+      run: dotnet nuget push ./nupkg/Messenger.WebAPI/*.nupkg --api-key ${{ secrets.NUGET_MESSENGER_WEBAPI_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
