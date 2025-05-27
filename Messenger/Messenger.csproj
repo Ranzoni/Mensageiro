@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Version>1.0.0</Version>
+    <Title>The Messenger</Title>
+    <Description>The messenger is a package for you to manage notifications in your application. It is nothing more than a list that allows you to consult and add messages.</Description>
+    <PackageProjectUrl>https://github.com/Ranzoni/Mensageiro</PackageProjectUrl>
+    <PackageIcon>mensageiro_icone.png</PackageIcon>
+    <RepositoryUrl>https://github.com/Ranzoni/Mensageiro</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\Assets\mensageiro_icone.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
