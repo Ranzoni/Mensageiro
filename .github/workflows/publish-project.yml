@@ -44,7 +44,7 @@ jobs:
     - name: Pack the project Messenger
       run: dotnet pack ./Messenger/Messenger.csproj --configuration Release --output ./nupkg/Messenger
 
-    - name: Publish Mensageiro to NuGet
+    - name: Publish Messenger to NuGet
       run: dotnet nuget push ./nupkg/Messenger/*.nupkg --api-key ${{ secrets.NUGET_MESSENGER_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
     # Mensageiro.WebAPI Project
